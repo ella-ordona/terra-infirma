@@ -17,7 +17,7 @@ let mixers = [];
 
 let actions = {};
 
-const models = ['./assets/models/clamshell.gltf', 'kalabaw.gltf',
+const models = ['clamshell.gltf', 'kalabaw.gltf',
                 'l-wind-rail.gltf', 'r-wind-rail.gltf', 'room.gltf', 'screen.gltf',
                 'shelf.gltf', 'sofa.gltf', 'vine.gltf'];
 
@@ -270,7 +270,7 @@ function createEnvMap() {
 
   new RGBELoader()
     .setDataType( THREE.UnsignedByteType )
-    .load( './assets/env/venice_sunset_1k.hdr', function ( hdrEquirect ) {
+    .load( '../assets/env/venice_sunset_1k.hdr', function ( hdrEquirect ) {
       var pmremGenerator = new THREE.PMREMGenerator( renderer );
       pmremGenerator.compileEquirectangularShader();
 
@@ -293,7 +293,7 @@ function createModels() {
   var filename;
 
   models.forEach(function(model) {
-    loader.load( './assets/models/' + model, function ( gltf ) {
+    loader.load( '../assets/models/' + model, function ( gltf ) {
       var model = gltf.scene;
       // console.log(gltf.scene);
       model.scale.set(3, 3, 3);
