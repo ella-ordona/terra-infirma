@@ -17,11 +17,9 @@ let mixers = [];
 
 let actions = {};
 
-const models = ['clamshell.gltf', 'kalabaw.gltf',
+const models = ['/assets/models/clamshell.gltf', 'kalabaw.gltf',
                 'l-wind-rail.gltf', 'r-wind-rail.gltf', 'room.gltf', 'screen.gltf',
                 'shelf.gltf', 'sofa.gltf', 'vine.gltf'];
-
-
 
 const root = "Bb4";
 
@@ -38,8 +36,6 @@ const transpose = (freq, semitones) => {
 const harmonize = (freq, semitones) => {
   return Tone.Frequency(freq).harmonize([0, 3, 7]);
 }
-
-
 
 init();
 
