@@ -15,7 +15,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "three": "^0.115.0",
-    "tone": "^13.8.25",
+    "tone": "^13.8.25"
   },
   "devDependencies": {
     "prettier": "^2.0.4",
