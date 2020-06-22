@@ -270,7 +270,7 @@ function createEnvMap() {
 
   new RGBELoader()
     .setDataType( THREE.UnsignedByteType )
-    .load( './public/assets/env/venice_sunset_1k.hdr', function ( hdrEquirect ) {
+    .load( './assets/env/venice_sunset_1k.hdr', function ( hdrEquirect ) {
       var pmremGenerator = new THREE.PMREMGenerator( renderer );
       pmremGenerator.compileEquirectangularShader();
 
@@ -293,7 +293,7 @@ function createModels() {
   var filename;
 
   models.forEach(function(model) {
-    loader.load( './public/assets/models/' + model, function ( gltf ) {
+    loader.load( './assets/models/' + model, function ( gltf ) {
       var model = gltf.scene;
       // console.log(gltf.scene);
       model.scale.set(3, 3, 3);
