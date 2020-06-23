@@ -6,10 +6,21 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { Sky } from './js/shaders/skyShader.js';
 
+import "./styles.css"
+
+let question = document.getElementById('question');
+let i = 0;
+let slider;
+let firstPass = false;
+let modelsLoaded = false;
+const loadingScreen = document.getElementById( 'loading-screen' );
+
+
 let camera, scene, renderer,
     controls, clock,
     mouse, raycaster,
-    spotlight, hemilight;
+    spotlight, hemilight,
+    loadingManager;
 
 let sky, sunSphere;
 
@@ -29,12 +40,16 @@ const highMelody = ["G5", "A5", "Bb5", "D6", "G6"];
 
 let highlightSynth;
 
+const loaderText = ["Is it in the feeling of sun on your face? Or in the smell of the hills behind the house after it rains?",
+                    "Is home where you left or where you went to?",
+                    "Do they understand the timbre of your voice and the shape of your words there?",
+                    "Are you safe there, are you listened to? Do you feel held?",
+                    "Are you safe there, are you listened to?",
+                    "Are you listened to?"
+                   ]
+
 const transpose = (freq, semitones) => {
   return Tone.Frequency(freq).transpose(semitones);
-}
-
-const harmonize = (freq, semitones) => {
-  return Tone.Frequency(freq).harmonize([0, 3, 7]);
 }
 
 init();
@@ -73,11 +88,11 @@ function createDrone() {
   reverbDampeningLfo.start();
   reverbDampeningLfo.connect(reverb.dampening);
 
-  initSynth();
-  initOsc();
+  createSynth();
+  createOsc();
 }
 
-function initSynth() {
+function createSynth() {
   var synth = new Tone.Synth({
         oscillator: {
           type: "square" + 4
@@ -101,7 +116,7 @@ function initSynth() {
  }, melody, "randomOnce");
 
    pattern.interval = "2m";
-   pattern.start(12);
+   pattern.start(18);
 
    var tempo = 70;
    Tone.Transport.bpm.value = tempo;
@@ -109,13 +124,20 @@ function initSynth() {
 
 }
 
-function initOsc() {
+function createOsc() {
   const fmOsc2 = new Tone.FMOscillator(transpose(root, -12), "sine", "square").toMaster().start(10);
-  const oscRootO3 = new Tone.FMOscillator(transpose(root, -24), "square4", "square").toMaster().start(0.5);
+  const oscRoot03 = new Tone.FMOscillator(transpose(root, -24), "square4", "square").toMaster().start(15);
 
-  const osc1 = new Tone.FMOscillator(transpose("G4", -12), "sine", "square").toMaster().start(0.5);
-  const osc2 = new Tone.FMOscillator(transpose("Bb4", -12), "sine", "square").toMaster().start(0.5);
-  const osc3 = new Tone.FMOscillator(transpose("D5", -12), "sine", "square").toMaster().start(0.5);
+  const osc1 = new Tone.FMOscillator(transpose("G4", -12), "sine", "square").toMaster().start(10);
+  const osc2 = new Tone.FMOscillator(transpose("Bb4", -12), "sine", "square").toMaster().start(10);
+  const osc3 = new Tone.FMOscillator(transpose("D5", -12), "sine", "square").toMaster().start(10);
+
+  fmOsc2.fadeIn = 60;
+  oscRoot03.fadeIn = 60;
+  osc1.fadeIn = 60;
+  osc2.fadeIn = 60;
+  osc3.fadeIn = 60;
+
 }
 
 function createHighlightSynth() {
@@ -133,7 +155,7 @@ function createHighlightSynth() {
           release: 2
         }
       }).toMaster();
-  highlightSynth.volume.value = 30;
+  highlightSynth.volume.value = 15;
   //set the attributes using the set interface
   highlightSynth.set("detune", -1200);
 }
@@ -260,9 +282,13 @@ function createSky() {
 }
 
 function createCamera() {
-  camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.01, 500000 );
-  camera.position.set( 0, 7, 0);
-  camera.lookAt(new THREE.Vector3(0,0,0)); // Set look at coordinate like this
+  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 500000 );
+  camera.position.y = 5;
+  // camera.lookAt(0, 0, 0);
+
+
+  // camera.lookAt(new THREE.Vector3(0,0,1)); // Set look at coordinate like this
+  scene.add(camera)
 
 }
 
@@ -289,7 +315,9 @@ function createEnvMap() {
 }
 
 function createModels() {
-  var loader = new GLTFLoader();
+
+
+  var loader = new GLTFLoader( loadingManager );
   var filename;
 
   models.forEach(function(model) {
@@ -304,8 +332,6 @@ function createModels() {
           obj.castShadow = true;
           obj.receiveShadow = true;
         }
-
-
 
           //keep in case of texture mapping later
           // var materials = Array.isArray(node.material);
@@ -372,6 +398,7 @@ function onWindowResize() {
 }
 
 function animate() {
+
   requestAnimationFrame(animate);
 
   var delta = clock.getDelta();
@@ -386,8 +413,30 @@ function render() {
   renderer.render( scene, camera );
 }
 
+function startLoaderPattern() {
+    console.log('again')
+    question.classList.add('hide');
+    console.log(question.classList)
+
+    let timer = setTimeout(function () {
+     question.innerHTML = loaderText[i];
+     console.log(loaderText[i])
+     question.classList.remove('hide');
+
+     i++;
+     if (i > loaderText.length) {
+       firstPass = true;
+       clearInterval(timer)
+       clearInterval(slider);
+       loadingScreen.classList.add( 'fade-out' );
+       loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+
+     }
+   }, 5000);
+}
 
 function init() {
+
   createHighlightSynth();
   createDrone();
 
@@ -397,9 +446,12 @@ function init() {
   //scene vars
   scene = new THREE.Scene();
 
+  loadingManager = new THREE.LoadingManager();
+
+  slider = setInterval(startLoaderPattern, 10000);
+
   // scene.background = new THREE.Color( 0xffffff );
   scene.fog = new THREE.Fog(0xC497F7, 0.1, 35);
-
 
   //raycaster vars for intersections
   raycaster = new THREE.Raycaster();
@@ -458,4 +510,10 @@ function checkAndPlay(objName) {
 
     }
   });
+}
+
+function onTransitionEnd( event ) {
+
+	event.target.remove();
+
 }
