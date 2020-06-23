@@ -1,3 +1,5 @@
+import "./styles.css"
+
 import * as THREE from 'three';
 import * as Tone from 'tone';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -6,7 +8,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { Sky } from './js/shaders/skyShader.js';
 
-import "./styles.css"
 
 let question = document.getElementById('question');
 let i = 0;
@@ -321,7 +322,6 @@ function createModels() {
   models.forEach(function(model) {
     loader.load( './assets/models/' + model, function ( gltf ) {
       var model = gltf.scene;
-      // console.log(gltf.scene);
       model.scale.set(3, 3, 3);
 
 
@@ -412,9 +412,7 @@ function render() {
 }
 
 function startLoaderPattern() {
-    console.log('again')
     question.classList.add('hide');
-    console.log(question.classList)
 
     let timer = setTimeout(function () {
      question.innerHTML = loaderText[i];
