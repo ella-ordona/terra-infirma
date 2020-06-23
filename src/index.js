@@ -28,9 +28,7 @@ let mixers = [];
 
 let actions = {};
 
-const models = ['clamshell.gltf', 'kalabaw.gltf',
-                'l-wind-rail.gltf', 'r-wind-rail.gltf', 'room.gltf', 'screen.gltf',
-                'shelf.gltf', 'sofa.gltf', 'vine.gltf'];
+const models = ['room.gltf', 'waterlily.gltf', 'tall-grass.gltf'];
 
 const root = "Bb4";
 
