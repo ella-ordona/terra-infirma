@@ -23,13 +23,19 @@ let camera, scene, renderer,
     spotlight, hemilight,
     loadingManager;
 
+let period = 60; // rotation time in seconds
+let matrix = new THREE.Matrix4(); // Pre-allocate empty matrix for performance. Don't want to make one of these every frame.
+
+
 let sky, sunSphere;
 
 let mixers = [];
 
 let actions = {};
 
-const models = ['room.gltf', 'waterlily.gltf', 'tall-grass.gltf'];
+const models = ['beaded-curtain.gltf', 'clamshell.gltf', 'halo-halo.gltf', 'hospital-bed.gltf',
+                'ivy.gltf', 'kalabaw.gltf', 'palm-tree.gltf', 'paper-boat.gltf', 'rice-cooker.gltf',
+                'room.gltf', 'sofa.gltf', 'statue.gltf', 'tall-grass.gltf', 'tsinelas.gltf', 'waterlily.gltf'];
 
 const root = "Bb4";
 
@@ -281,9 +287,11 @@ function createSky() {
 }
 
 function createCamera() {
-  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 500000 );
-  camera.position.y = 5;
-  // camera.lookAt(0, 0, 0);
+  camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 0.01, 500000 );
+  // camera.position.y = 5;
+
+  camera.position.set( 0, 3.5, -4);
+  camera.rotateY( 180 * (Math.PI/180));
 
 
   // camera.lookAt(new THREE.Vector3(0,0,1)); // Set look at coordinate like this
@@ -360,12 +368,20 @@ function createLights() {
   hemilight = new THREE.HemisphereLight( 0xffeeb1, 0x080820, 4 );
   scene.add( hemilight );
 
-  spotlight = new THREE.SpotLight( 0xffa95c, 2);
+
+
+  spotlight = new THREE.SpotLight( 0xffeeb1, 1);
+  spotlight.penumbra = 1;
+  spotlight.decay = .5;
+  spotlight.position.set( 0, 8,-1 );
   spotlight.castShadow = true;
   spotlight.shadow.bias = -0.004;
   spotlight.shadow.mapSize.width = 1024*4;
   spotlight.shadow.mapSize.height = 1024*4;
   scene.add( spotlight );
+
+//   var spotLightHelper = new THREE.SpotLightHelper( spotlight );
+//  scene.add( spotLightHelper );
 }
 
 function createRendererAndControls() {
@@ -377,7 +393,7 @@ function createRendererAndControls() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   document.body.appendChild( renderer.domElement );
 
-  controls = new OrbitControls( camera, renderer.domElement );
+  // controls = new OrbitControls( camera, renderer.domElement );
   //controls.maxPolarAngle = Math.PI / 2;
   // controls.enableZoom = false;
   // controls.enablePan = false;
@@ -401,7 +417,16 @@ function animate() {
 
   var delta = clock.getDelta();
 
-  controls.update();
+  // controls.update();
+
+  matrix.makeRotationY(delta * 2 * Math.PI / period);
+
+// Apply matrix like this to rotate the camera.
+  camera.position.applyMatrix4(matrix);
+
+// Make camera look at the box.
+  camera.lookAt(0, 3, 0);
+
 
   render();
 }
@@ -444,7 +469,7 @@ function init() {
 
   loadingManager = new THREE.LoadingManager();
 
-  slider = setInterval(startLoaderPattern, 10000);
+  // slider = setInterval(startLoaderPattern, 10000);
 
   // scene.background = new THREE.Color( 0xffffff );
   scene.fog = new THREE.Fog(0xC497F7, 0.1, 35);
