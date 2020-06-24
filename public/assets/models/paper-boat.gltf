@@ -96,9 +96,9 @@
 	}],
 	"materials":[{
 		"pbrMetallicRoughness":{
-			"baseColorFactor":[0.7482352941176471,
-			0.8988235294117647,
-			0.6964705882352941,
+			"baseColorFactor":[0.996078431372549,
+			0.26666666666666669,
+			0.28627450980392118,
 			1.0],
 			"metallicFactor":1.0,
 			"roughnessFactor":1.0
@@ -108,6 +108,6 @@
 		0.0],
 		"alphaMode":"OPAQUE",
 		"doubleSided":true,
-		"name":"Green"
+		"name":"Pearl"
 	}]
 }
