@@ -23,8 +23,9 @@ let camera, scene, renderer,
     spotlight, hemilight,
     loadingManager;
 
-let period = 60; // rotation time in seconds
+let period = 120; // rotation time in seconds
 let matrix = new THREE.Matrix4(); // Pre-allocate empty matrix for performance. Don't want to make one of these every frame.
+let delta;
 
 
 let sky, sunSphere;
@@ -33,9 +34,10 @@ let mixers = [];
 
 let actions = {};
 
-const models = ['beaded-curtain.gltf', 'clamshell.gltf', 'halo-halo.gltf', 'hospital-bed.gltf',
-                'ivy.gltf', 'kalabaw.gltf', 'palm-tree.gltf', 'paper-boat.gltf', 'rice-cooker.gltf',
-                'room.gltf', 'sofa.gltf', 'statue.gltf', 'tall-grass.gltf', 'tsinelas.gltf', 'waterlily.gltf'];
+const models = ['beaded-curtain.gltf', 'burger.gltf', 'clamshell.gltf', 'halo-halo.gltf', 'hospital-bed.gltf',
+                'ivy.gltf', 'kalabaw.gltf', 'palm-tree.gltf', 'paper-boat.gltf', 'passport.gltf', 'pine.gltf',
+                'rice-cooker.gltf', 'room.gltf', 'sofa.gltf', 'statue.gltf', 'suitcase.gltf', 'tall-grass.gltf',
+                'tsinelas.gltf', 'waterlily.gltf'];
 
 const root = "Bb4";
 
@@ -259,7 +261,7 @@ function createSky() {
   gui.add( effectController, "rayleigh", 0.0, 10, 0.001 ).onChange( guiChanged );
   gui.add( effectController, "mieCoefficient", 0.0, 0.1, 0.001 ).onChange( guiChanged );
   gui.add( effectController, "mieDirectionalG", 0.0, 1, 0.001 ).onChange( guiChanged );
-  gui.add( effectController, "luminance", 0.0, 2 ).onChange( guiChanged );
+  gui.add( effectController, "luminance", 0.0, 10 ).onChange( guiChanged );
   gui.add( effectController, "inclination", 0, 1, 0.0001 ).onChange( guiChanged );
   gui.add( effectController, "azimuth", 0, 1, 0.0001 ).onChange( guiChanged );
   gui.add( effectController, "refractiveIndex", 1, 2, 0.0001 ).onChange( guiChanged );
@@ -287,11 +289,11 @@ function createSky() {
 }
 
 function createCamera() {
-  camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 0.01, 500000 );
+  camera = new THREE.PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 0.01, 500000 );
   // camera.position.y = 5;
 
-  camera.position.set( 0, 3.5, -4);
-  camera.rotateY( 180 * (Math.PI/180));
+  camera.position.set( 0, 3.5, -8);
+  // camera.rotateY( 180 * (Math.PI/180));
 
 
   // camera.lookAt(new THREE.Vector3(0,0,1)); // Set look at coordinate like this
@@ -415,9 +417,11 @@ function animate() {
 
   requestAnimationFrame(animate);
 
-  var delta = clock.getDelta();
+  render();
+}
 
-  // controls.update();
+function render() {
+  delta = clock.getDelta();
 
   matrix.makeRotationY(delta * 2 * Math.PI / period);
 
@@ -425,13 +429,7 @@ function animate() {
   camera.position.applyMatrix4(matrix);
 
 // Make camera look at the box.
-  camera.lookAt(0, 3, 0);
-
-
-  render();
-}
-
-function render() {
+  camera.lookAt(0, 3.5, -3);
 
   renderer.render( scene, camera );
 }
@@ -497,21 +495,8 @@ function onClick( event ) {
 
 	event.preventDefault();
 
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  highlightSynth.triggerAttackRelease(highMelody[Math.floor(Math.random() * highMelody.length)], "16n");
 
-	raycaster.setFromCamera( mouse, camera );
-
-	var intersects = raycaster.intersectObjects( scene.children, true );
-
-	if ( intersects.length > 0) {
-
-    //if object clicked on is mesh, get name and run check animation function
-    if (intersects[ 0 ].object.type == 'Mesh' || intersects[ 0 ].object.type == 'SkinnedMesh') {
-      highlightSynth.triggerAttackRelease(highMelody[Math.floor(Math.random() * highMelody.length)], "16n");
-
-    }
-	}
 
 }
 
