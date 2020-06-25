@@ -523,7 +523,6 @@ function onTransitionEnd( event ) {
 }
 
 function isMobile() {
-  console.log('here')
   let isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
   if (isMobile) {
     question.innerHTML = 'For best experience, view on desktop.'
