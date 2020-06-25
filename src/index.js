@@ -522,4 +522,14 @@ function onTransitionEnd( event ) {
 
 }
 
-init();
+function isMobile() {
+  let isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
+  if (isMobile) {
+    question.innerHTML = 'For best experience, view on desktop.'
+    createDrone();
+  } else {
+    init();
+  }
+};
+
+isMobile();

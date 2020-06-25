@@ -40,3 +40,9 @@ canvas {
 .hide {
     opacity: 0 !important;
 }
+
+@media only screen and (max-width: 786px) {
+  h1 {
+    font-size: 1.25rem;
+  }
+}
