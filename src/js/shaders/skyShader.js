@@ -23,6 +23,20 @@ import {
 	Vector3
 } from "three/build/three.module.js";
 
+function randIntGen (min, max, divisor) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  let int;
+  if (divisor == 1) {
+    int = Math.floor(Math.random() * (max - min + 1)) + min;
+  } else {
+    int = (Math.random() * (max - min + 1) + min)/divisor;
+
+  }
+  // console.log(int);
+  return int;
+}
+
 var Sky = function () {
 
 	var shader = Sky.SkyShader;
@@ -42,26 +56,26 @@ var Sky = function () {
 Sky.prototype = Object.create( Mesh.prototype );
 
 Sky.SkyShader = {
-
+//
 	uniforms: {
-		"luminance": { value: 4 },
-		"turbidity": { value: 2 },
-		"rayleigh": { value: 1 },
-		"mieCoefficient": { value: 0.005 },
-		"mieDirectionalG": { value: 0.8 },
+		"luminance": { value: randIntGen( 1, 10, 1  ) },
+		"turbidity": { value: randIntGen( 1, 10, 1 ) },
+		"rayleigh": { value: randIntGen( 1, 10, 1 ) },
+		"mieCoefficient": { value: randIntGen( 0, 1, 10) },
+		"mieDirectionalG": { value: randIntGen( 0, 1, 10  ) },
 		"sunPosition": { value: new Vector3() },
-    "mieV": { value: 1.0 },
+    "mieV": { value: randIntGen( 0, 1, 10) + 3 },
 		"up": { value: new Vector3( 0, 1, 0 ) },
 		"cameraPos": { value: new Vector3() },
 		"refractiveIndex": { value: 1.0003 },
 		"numMolecules": { value: 2.542e25 },
 		"depolarizationFactor": { value: 0.035 },
-		"primaries": { value: new Vector3(680E-9, 550E-9, 450E-9 ) },
-		"mieKCoefficient": { value: new Vector3() },
+		"primaries": { value: new Vector3() },
+		"mieKCoefficient": { value: new Vector3( randIntGen(686, 1000, 1)/1000, randIntGen(686, 1000, 1)/1000, randIntGen(686, 1000, 1)/1000 ) },
 		"mieV": { value: 4.0 },
 		"rayleighZenithLength": { value: 8.4e3 },
-		"mieZenithLength": { value: 1.25e3 },
-		"sunIntensityFactor": { value: 1000.0 },
+		"mieZenithLength": { value: (randIntGen( 5, 340, 1 ) * 100) },
+		"sunIntensityFactor": { value: (randIntGen( 10, 25, 1 ) * 100) },
 		"sunIntensityFalloffSteepness": { value: 1.5 },
 		"sunAngularDiameterDegrees": { value: 0.0093333 },
 		"tonemapWeighting": { value: 9.50 }

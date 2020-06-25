@@ -59,7 +59,17 @@ const transpose = (freq, semitones) => {
   return Tone.Frequency(freq).transpose(semitones);
 }
 
+
+
 init();
+
+function randIntGen (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  let int = Math.floor(Math.random() * (max - min + 1)) + min;
+  console.log(int);
+  return int;
+}
 
 function createDrone() {
 
@@ -216,75 +226,67 @@ function createSky() {
 
   var distance = 400000;
 
-  function guiChanged() {
+
 
   var uniforms = sky.material.uniforms;
-  uniforms[ "turbidity" ].value = effectController.turbidity;
-  uniforms[ "rayleigh" ].value = effectController.rayleigh;
-  uniforms[ "mieCoefficient" ].value = effectController.mieCoefficient;
-  uniforms[ "mieDirectionalG" ].value = effectController.mieDirectionalG;
-  uniforms[ "luminance" ].value = effectController.luminance;
-  uniforms[ "refractiveIndex" ].value = effectController.refractiveIndex;
-  uniforms[ "numMolecules" ].value = effectController.numMolecules;
-  uniforms[ "mieZenithLength" ].value = effectController.mieZenithLength
-  uniforms[ "mieV" ].value = effectController.mieV;
-  uniforms[ "sunIntensityFactor" ].value = effectController.sunIntensityFactor;
-  uniforms[ "sunIntensityFalloffSteepness" ].value = effectController.sunIntensityFalloffSteepness;
-  uniforms[ "sunAngularDiameterDegrees" ].value = effectController.sunAngularDiameterDegrees;
-  uniforms[ "tonemapWeighting" ].value = effectController.tonemapWeighting;
-  uniforms[ "primaries"].value.x = effectController.px;
-  uniforms[ "primaries"].value.y = effectController.py;
-  uniforms[ "primaries"].value.z = effectController.pz;
-  uniforms[ "mieKCoefficient" ].value.x = effectController.mx;
-  uniforms[ "mieKCoefficient" ].value.y = effectController.my;
-  uniforms[ "mieKCoefficient" ].value.z = effectController.mz;
+  uniforms[ "turbidity" ].value = randIntGen( 1, 10 );
+  uniforms[ "rayleigh" ].value = randIntGen( 1, 10 );
+  uniforms[ "mieCoefficient" ].value = randIntGen( 1, 10 )/1000;
+  uniforms[ "mieDirectionalG" ].value = randIntGen( 1, 10 )/100;
+  uniforms[ "luminance" ].value = randIntGen( 1, 10 );
+  uniforms[ "mieZenithLength" ].value = randIntGen( 500, 34000)
+  uniforms[ "mieV" ].value = randIntGen(30, 40)/10;
+  uniforms[ "sunIntensityFactor" ].value = randIntGen(1000, 2000);
+  uniforms[ "primaries"].value.x = randIntGen(68, 80) * 1e-8;
+  uniforms[ "primaries"].value.y = randIntGen(38, 55) * 1e-8;
+  uniforms[ "primaries"].value.z = randIntGen(32, 51) * 1e-8;
+  uniforms[ "mieKCoefficient" ].value.x = randIntGen(69, 100)/100;
+  uniforms[ "mieKCoefficient" ].value.y = randIntGen(68, 100)/100;
+  uniforms[ "mieKCoefficient" ].value.z = randIntGen(67, 100)/100;
 
 
-
-
-  var theta = Math.PI * ( effectController.inclination - 0.5 );
-  var phi = 2 * Math.PI * ( effectController.azimuth - 0.5 );
+  var theta = Math.PI * ( 0.49 - 0.5 );
+  var phi = 2 * Math.PI * ( (randIntGen(10, 100)/100) - 0.5 );
 
   sunSphere.position.x = distance * Math.cos( phi );
   sunSphere.position.y = distance * Math.sin( phi ) * Math.sin( theta );
   sunSphere.position.z = distance * Math.sin( phi ) * Math.cos( theta );
 
-  sunSphere.visible = effectController.sun;
+  sunSphere.visible = false;
 
   uniforms[ "sunPosition" ].value.copy( sunSphere.position );
 
-  }
 
-  var gui = new GUI();
-
-  gui.add( effectController, "turbidity", 1.0, 20.0, 0.1 ).onChange( guiChanged );
-  gui.add( effectController, "rayleigh", 0.0, 10, 0.001 ).onChange( guiChanged );
-  gui.add( effectController, "mieCoefficient", 0.0, 0.1, 0.001 ).onChange( guiChanged );
-  gui.add( effectController, "mieDirectionalG", 0.0, 1, 0.001 ).onChange( guiChanged );
-  gui.add( effectController, "luminance", 0.0, 10 ).onChange( guiChanged );
-  gui.add( effectController, "inclination", 0, 1, 0.0001 ).onChange( guiChanged );
-  gui.add( effectController, "azimuth", 0, 1, 0.0001 ).onChange( guiChanged );
-  gui.add( effectController, "refractiveIndex", 1, 2, 0.0001 ).onChange( guiChanged );
-  gui.add( effectController, "numMolecules", 0, 3, 0.1 ).onChange( guiChanged );
-  gui.add( effectController, "depolarizationFactor", 0, 1, 0.1 ).onChange( guiChanged );
-  gui.add( effectController, "rayleighZenithLength", 100, 200000, 100 ).onChange( guiChanged );
-  gui.add( effectController, "mieV", 3, 4, .01 ).onChange( guiChanged );
-  gui.add( effectController, "mieZenithLength", 500, 34000, 100 ).onChange( guiChanged );
-  gui.add( effectController, "sunIntensityFactor", 1000, 2500, 100 ).onChange( guiChanged );
-  gui.add( effectController, "sunIntensityFalloffSteepness", .75, 2.25, .25 ).onChange( guiChanged );
-  gui.add( effectController, "sunAngularDiameterDegrees", 0.009, .01, .05 ).onChange( guiChanged );
-
-  gui.add( effectController, "sun" ).onChange( guiChanged );
-
-  gui.add(effectController, "px", 6.8e-7, 8e-7, 0.1e-7).onChange( guiChanged );
-  gui.add(effectController, "py", 3.766e-7, 5.5e-7, 0.3e-7).onChange( guiChanged );
-  gui.add(effectController, "pz", 3.172e-7, 5.1e-7, 0.3e-7).onChange( guiChanged );
-  gui.add(effectController, "mx", 0.686, 1, 0.1).onChange( guiChanged );
-  gui.add(effectController, "my", 0.678, 1, 0.1).onChange( guiChanged );
-  gui.add(effectController, "mz", 0.666, 1, 0.3e-7).onChange( guiChanged );
-
-
-  guiChanged();
+  // var gui = new GUI();
+  //
+  // gui.add( effectController, "turbidity", 1.0, 20.0, 0.1 ).onChange( guiChanged );
+  // gui.add( effectController, "rayleigh", 0.0, 10, 0.001 ).onChange( guiChanged );
+  // gui.add( effectController, "mieCoefficient", 0.0, 0.1, 0.001 ).onChange( guiChanged );
+  // gui.add( effectController, "mieDirectionalG", 0.0, 1, 0.001 ).onChange( guiChanged );
+  // gui.add( effectController, "luminance", 0.0, 2 ).onChange( guiChanged );
+  // gui.add( effectController, "inclination", 0, 1, 0.0001 ).onChange( guiChanged );
+  // gui.add( effectController, "azimuth", 0, 1, 0.0001 ).onChange( guiChanged );
+  // gui.add( effectController, "refractiveIndex", 1, 2, 0.0001 ).onChange( guiChanged );
+  // gui.add( effectController, "numMolecules", 0, 3, 0.1 ).onChange( guiChanged );
+  // gui.add( effectController, "depolarizationFactor", 0, 1, 0.1 ).onChange( guiChanged );
+  // gui.add( effectController, "rayleighZenithLength", 100, 200000, 100 ).onChange( guiChanged );
+  // gui.add( effectController, "mieV", 3, 4, .01 ).onChange( guiChanged );
+  // gui.add( effectController, "mieZenithLength", 500, 34000, 100 ).onChange( guiChanged );
+  // gui.add( effectController, "sunIntensityFactor", 1000, 2500, 100 ).onChange( guiChanged );
+  // gui.add( effectController, "sunIntensityFalloffSteepness", .75, 2.25, .25 ).onChange( guiChanged );
+  // gui.add( effectController, "sunAngularDiameterDegrees", 0.009, .01, .05 ).onChange( guiChanged );
+  //
+  // gui.add( effectController, "sun" ).onChange( guiChanged );
+  //
+  // gui.add(effectController, "px", 6.8e-7, 8e-7, 0.1e-7).onChange( guiChanged );
+  // gui.add(effectController, "py", 3.766e-7, 5.5e-7, 0.3e-7).onChange( guiChanged );
+  // gui.add(effectController, "pz", 3.172e-7, 5.1e-7, 0.3e-7).onChange( guiChanged );
+  // gui.add(effectController, "mx", 0.686, 1, 0.1).onChange( guiChanged );
+  // gui.add(effectController, "my", 0.678, 1, 0.1).onChange( guiChanged );
+  // gui.add(effectController, "mz", 0.666, 1, 0.3e-7).onChange( guiChanged );
+  //
+  //
+  // guiChanged();
 
 }
 
