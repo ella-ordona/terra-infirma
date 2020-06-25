@@ -52,7 +52,8 @@ const loaderText = ["Is it in the feeling of sun on your face? Or in the smell o
                     "Do they understand the timbre of your voice and the shape of your words there?",
                     "Are you safe there, are you listened to? Do you feel held?",
                     "Are you safe there, are you held?",
-                    "Are you listened to?"
+                    "Are you listened to?",
+                    "Where is home?"
                    ]
 
 const transpose = (freq, semitones) => {
@@ -437,13 +438,15 @@ function startLoaderPattern() {
     question.classList.add('hide');
 
     let timer = setTimeout(function () {
-     question.innerHTML = loaderText[i];
+      question.innerHTML = loaderText[i];
+      console.log(question.innerHTML)
+
      // console.log(loaderText[i])
      question.classList.remove('hide');
 
      i++;
 
-     if (i > loaderText.length) {
+     if (i == loaderText.length) {
        i = 0;
        firstPass = true;
      }
