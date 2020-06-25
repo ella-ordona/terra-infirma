@@ -47,11 +47,11 @@ const highMelody = ["G5", "A5", "Bb5", "D6", "G6"];
 
 let highlightSynth;
 
-const loaderText = ["Is it in the feeling of sun on your face? Or in the smell of the hills behind the house after it rains?",
+const loaderText = ["Is it in the feeling of sun on your face? Or in the smell of the road after it rains?",
                     "Is home where you left or where you went to?",
                     "Do they understand the timbre of your voice and the shape of your words there?",
                     "Are you safe there, are you listened to? Do you feel held?",
-                    "Are you safe there, are you listened to?",
+                    "Are you safe there, are you held?",
                     "Are you listened to?"
                    ]
 
@@ -59,15 +59,10 @@ const transpose = (freq, semitones) => {
   return Tone.Frequency(freq).transpose(semitones);
 }
 
-
-
-init();
-
 function randIntGen (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   let int = Math.floor(Math.random() * (max - min + 1)) + min;
-  console.log(int);
   return int;
 }
 
@@ -294,9 +289,8 @@ function createCamera() {
   camera = new THREE.PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 0.01, 500000 );
   // camera.position.y = 5;
 
-  camera.position.set( 0, 3.5, -8);
-  // camera.rotateY( 180 * (Math.PI/180));
-
+  // camera.position.set( 0, 3.5, -8);
+  camera.position.set(-7.5, 3.5, 2.77)
 
   // camera.lookAt(new THREE.Vector3(0,0,1)); // Set look at coordinate like this
   scene.add(camera)
@@ -432,8 +426,12 @@ function render() {
 
 // Make camera look at the box.
   camera.lookAt(0, 3.5, -3);
+  console.log(camera.position)
+
+  // console.log(camera.position)
 
   renderer.render( scene, camera );
+
 }
 
 function startLoaderPattern() {
@@ -441,7 +439,7 @@ function startLoaderPattern() {
 
     let timer = setTimeout(function () {
      question.innerHTML = loaderText[i];
-     console.log(loaderText[i])
+     // console.log(loaderText[i])
      question.classList.remove('hide');
 
      i++;
@@ -469,7 +467,7 @@ function init() {
 
   loadingManager = new THREE.LoadingManager();
 
-  // slider = setInterval(startLoaderPattern, 10000);
+  slider = setInterval(startLoaderPattern, 10000);
 
   // scene.background = new THREE.Color( 0xffffff );
   scene.fog = new THREE.Fog(0xC497F7, 0.1, 35);
@@ -478,7 +476,6 @@ function init() {
   raycaster = new THREE.Raycaster();
 	mouse = new THREE.Vector2();
   window.addEventListener( 'click', onClick, false );
-
 
   createCamera();
   createEnvMap();
@@ -523,5 +520,8 @@ function checkAndPlay(objName) {
 function onTransitionEnd( event ) {
 
 	event.target.remove();
+  console.log(camera.position)
 
 }
+
+init();
