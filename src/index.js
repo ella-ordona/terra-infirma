@@ -442,21 +442,21 @@ function startLoaderPattern() {
      question.classList.remove('hide');
 
      i++;
+
      if (i > loaderText.length) {
+       i = 0;
        firstPass = true;
+     }
+     if (firstPass == true) {
        clearInterval(timer)
        clearInterval(slider);
        loadingScreen.classList.add( 'fade-out' );
        loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
-
      }
    }, 5000);
 }
 
 function init() {
-
-  createHighlightSynth();
-  createDrone();
 
   //clock for animation
   clock = new THREE.Clock();
@@ -495,6 +495,12 @@ function onClick( event ) {
 
   highlightSynth.triggerAttackRelease(highMelody[Math.floor(Math.random() * highMelody.length)], "16n");
 
+//   let d=document.createElement("div");
+//   d.className="click";
+//   d.style.top=event.clientY+"px";d.style.left=event.clientX+"px";
+//   document.body.appendChild(d);
+//   d.addEventListener('animationend',function(){d.parentElement.removeChild(d);}.bind(this));
+
 
 }
 
@@ -522,14 +528,17 @@ function onTransitionEnd( event ) {
 
 }
 
+
+
 function isMobile() {
   let isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
   if (isMobile) {
     question.innerHTML = 'For best experience, view on desktop.'
-    createDrone();
   } else {
     init();
   }
 };
 
+createHighlightSynth();
+createDrone();
 isMobile();
