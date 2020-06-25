@@ -426,7 +426,6 @@ function render() {
 
 // Make camera look at the box.
   camera.lookAt(0, 3.5, -3);
-  console.log(camera.position)
 
   // console.log(camera.position)
 
@@ -520,7 +519,6 @@ function checkAndPlay(objName) {
 function onTransitionEnd( event ) {
 
 	event.target.remove();
-  console.log(camera.position)
 
 }
 
