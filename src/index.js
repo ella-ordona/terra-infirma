@@ -13,8 +13,12 @@ let question = document.getElementById('question');
 let i = 0;
 let slider;
 let firstPass = false;
+let visited = false;
 let modelsLoaded = false;
 const loadingScreen = document.getElementById( 'loading-screen' );
+const skipOption = document.getElementById('skip-option');
+const button = document.getElementById('btn');
+const about = document.getElementById('nav');
 
 
 let camera, scene, renderer,
@@ -435,31 +439,51 @@ function render() {
 }
 
 function startLoaderPattern() {
-    question.classList.add('hide');
 
-    let timer = setTimeout(function () {
-      question.innerHTML = loaderText[i];
-      console.log(question.innerHTML)
+  if (firstPass == true) {
+    clearInterval(slider);
+    loadingScreen.classList.add( 'fade-out' );
+    loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+  }
 
-     // console.log(loaderText[i])
-     question.classList.remove('hide');
+  question.classList.add('hide');
 
-     i++;
+  let timer = setTimeout(function () {
+    question.innerHTML = loaderText[i];
+    console.log(question.innerHTML)
 
-     if (i == loaderText.length) {
-       i = 0;
-       firstPass = true;
-     }
-     if (firstPass == true) {
-       clearInterval(timer)
+   // console.log(loaderText[i])
+   question.classList.remove('hide');
+
+   i++;
+
+   if (i == loaderText.length) {
+     i = 0;
+     firstPass = true;
+   }
+
+   if (i == 3 && visited) {
+     skipOption.classList.remove('hide');
+     skipOption.addEventListener('click', function (e) {
        clearInterval(slider);
        loadingScreen.classList.add( 'fade-out' );
        loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
-     }
-   }, 5000);
+     })
+   }
+
+ }, 5000);
 }
 
 function init() {
+
+  button.addEventListener('click', function(e) {
+    console.log('clicked')
+    if (about.classList.contains('hide')) {
+      about.classList.remove('hide');
+    } else {
+      about.classList.add('hide');
+    }
+  });
 
   //clock for animation
   clock = new THREE.Clock();
@@ -468,6 +492,15 @@ function init() {
   scene = new THREE.Scene();
 
   loadingManager = new THREE.LoadingManager();
+
+  let ls = localStorage.getItem('namespace.visited');
+
+  if (ls == null) {
+      localStorage.setItem('namespace.visited', 1)
+  } else {
+    visited = true;
+  }
+
 
   slider = setInterval(startLoaderPattern, 10000);
 
@@ -498,12 +531,7 @@ function onClick( event ) {
 
   highlightSynth.triggerAttackRelease(highMelody[Math.floor(Math.random() * highMelody.length)], "16n");
 
-//   let d=document.createElement("div");
-//   d.className="click";
-//   d.style.top=event.clientY+"px";d.style.left=event.clientX+"px";
-//   document.body.appendChild(d);
-//   d.addEventListener('animationend',function(){d.parentElement.removeChild(d);}.bind(this));
-
+  console.log(event.target)
 
 }
 
@@ -530,8 +558,6 @@ function onTransitionEnd( event ) {
 	event.target.remove();
 
 }
-
-
 
 function isMobile() {
   let isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;

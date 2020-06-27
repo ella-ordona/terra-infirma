@@ -1,15 +1,39 @@
 body {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
+  /* font-weight: 100; */
 }
 
 canvas {
   display: block;
 }
 
+button {
+    background-color: transparent;
+    border: none;
+    padding: none;
+    position: absolute;
+    left: 90%;
+    top: 2.5%;
+    opacity: 80%;
+    font-family: 'Noto Sans JP', sans-serif;
+    /* color: grey; */
+    font-size: 150%;
+    z-index: 2;
+}
+
+button:focus {
+    outline: none;
+}
+
+.overlay-content > h3 {
+  line-height:1.5;
+}
+
+
 #loading-screen {
 	position: absolute;
-	z-index: 2;
+	z-index: 3;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -31,15 +55,43 @@ canvas {
     opacity: 0;
 }
 
-
 #question {
   opacity: 1;
   transition: opacity 1s;
 }
 
+#skip-option {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 100%);
+}
+
 .hide {
     opacity: 0 !important;
 }
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background-color: rgba(223, 191, 244, 0.75);
+
+}
+
+.overlay-content {
+  width: 30%;
+  height: 50%;
+
+}
+
+
 
 @media only screen and (max-width: 786px) {
   h1 {
