@@ -483,9 +483,7 @@ function init() {
     }
   });
 
-  setTimeout(function() {
-    button.style.visibility = 'visible';
-  }, 90000)
+
 
 
   //clock for animation
@@ -556,6 +554,9 @@ function checkAndPlay(objName) {
 
 function onTransitionEnd( event ) {
   event.target.remove();
+  setTimeout(function() {
+    button.style.visibility = 'visible';
+  }, 30000)
 }
 
 function isMobile() {

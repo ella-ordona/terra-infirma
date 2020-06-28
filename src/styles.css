@@ -93,6 +93,10 @@ button:focus {
 
 }
 
+a:hover, button.hover, h1:hover, h3:hover, h4:hover {
+  cursor: default;
+}
+
 
 
 @media only screen and (max-width: 786px) {
