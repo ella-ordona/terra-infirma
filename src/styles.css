@@ -15,11 +15,13 @@ button {
     position: absolute;
     left: 90%;
     top: 2.5%;
-    opacity: 80%;
+    opacity: 50%;
     font-family: 'Noto Sans JP', sans-serif;
     /* color: grey; */
     font-size: 150%;
     z-index: 2;
+    visibility: hidden;
+
 }
 
 button:focus {
@@ -96,5 +98,11 @@ button:focus {
 @media only screen and (max-width: 786px) {
   h1 {
     font-size: 1.25rem;
+  }
+  button {
+    font-size: .9rem;
+    left: 80%;
+    top: 2.5%;
+    z-index: 2
   }
 }

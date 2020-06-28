@@ -475,15 +475,18 @@ function startLoaderPattern() {
 }
 
 function init() {
-
   button.addEventListener('click', function(e) {
-    console.log('clicked')
     if (about.classList.contains('hide')) {
       about.classList.remove('hide');
     } else {
       about.classList.add('hide');
     }
   });
+
+  setTimeout(function() {
+    button.style.visibility = 'visible';
+  }, 90000)
+
 
   //clock for animation
   clock = new THREE.Clock();
@@ -531,8 +534,6 @@ function onClick( event ) {
 
   highlightSynth.triggerAttackRelease(highMelody[Math.floor(Math.random() * highMelody.length)], "16n");
 
-  console.log(event.target)
-
 }
 
 function checkAndPlay(objName) {
@@ -554,9 +555,7 @@ function checkAndPlay(objName) {
 }
 
 function onTransitionEnd( event ) {
-
-	event.target.remove();
-
+  event.target.remove();
 }
 
 function isMobile() {
@@ -567,6 +566,7 @@ function isMobile() {
     init();
   }
 };
+
 
 createHighlightSynth();
 createDrone();
